@@ -1,19 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Google.Protobuf.WellKnownTypes;
 using IronXL;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Linq;
+using System.Collections.Generic;
+
 
 namespace Marché
 {
     internal class Program
     {
+        const string filePath = "C:\\Users\\etrot\\OneDrive\\Documents\\GitHub\\323-Programmation_fonctionnelle\\exos_fait\\Marché\\Place du marché.xlsx"; //"C:\\Users\\pk50gbi\\Documents\\GitHub\\323-Programmation_fonctionnelle\\exos_fait\\Marché\\Place du marché.xlsx";
         static void Main(string[] args)
         {
-            const string filePath = "C:\\Users\\pk50gbi\\Documents\\GitHub\\323-Programmation_fonctionnelle\\exos_fait\\Marché\\Place du marché.xlsx";
 
-            if (File.Exists(filePath))
+
+            //******* V1 ********\\
+
+            /*if (File.Exists(filePath))
             {
                 WorkBook workBook = WorkBook.Load(filePath); // charge le fichier excel
                 WorkSheet workSheet = workBook.WorkSheets[1];
@@ -74,8 +79,74 @@ namespace Marché
             {
                 Console.WriteLine("Le fichier n'est pas la !");
                 Console.ReadLine();
-            }
+            }*/
 
+            ///********** V3 ********** \\\
+
+            List<Seller> seller = new List<Seller>();
+
+            if (File.Exists(filePath))
+            {
+                seller = Oui(seller);
+
+                int nbrSellerPeach = seller.Where(s => s.ProductName == "Pêches").Count();
+
+                seller = seller.Where(s => s.ProductName == "Pastèques").ToList();
+                var bestSeller = seller.OrderByDescending(s => int.Parse(s.NbrProduct)).First();
+
+                Console.WriteLine($"Il y a {nbrSellerPeach} vendeurs de pêches");
+                Console.WriteLine($"C'est {bestSeller.SellerName} qui a le plus de pastèque (stand {bestSeller.Stand}, {bestSeller.NbrProduct} pièces)");
+            }
+            else
+            {
+                Console.WriteLine("Le fichier n'est pas la !");
+                Console.ReadLine();
+            }
+        }
+
+        class Seller
+        {
+            public string Stand { get; set; }
+            public string SellerName { get; set; }
+            public string ProductName { get; set; }
+            public string NbrProduct { get; set; }
+            public string QuantityName { get; set; }
+            public string price { get; set; }
+        }
+
+        private static List<Seller> Oui(List<Seller> seller)
+        {
+            WorkBook workBook = WorkBook.Load(filePath); // charge le fichier excel
+            WorkSheet workSheet = workBook.WorkSheets[1];
+
+            // On parcourt chaque ligne du tableau (de 2 à 75)
+            for (int row = 2; row <= 75; row++)
+            {
+                // On lit les colonnes de A à F
+                string Stand = workSheet["A" + row].StringValue;
+                string SellerName = workSheet["B" + row].StringValue;
+                string ProductName = workSheet["C" + row].StringValue;
+                string NbrProduct = workSheet["D" + row].StringValue;
+                string QuantityName = workSheet["E" + row].StringValue;
+                string Price = workSheet["F" + row].StringValue;
+
+                // Si la ligne est vide, on saute
+                if (string.IsNullOrWhiteSpace(SellerName) && string.IsNullOrWhiteSpace(ProductName))
+                    continue;
+
+                // On ajoute à la liste
+                seller.Add(new Seller
+                {
+                    Stand = Stand,
+                    SellerName = SellerName,
+                    ProductName = ProductName,
+                    NbrProduct = NbrProduct,
+                    QuantityName = QuantityName,
+                    price = Price
+                });
+
+            }
+            return seller;
         }
     }
 }
