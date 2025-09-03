@@ -75,10 +75,7 @@ namespace Words
                 }
             }
 
-            foreach (var kvp in map)
-            {
-                Console.WriteLine($"Lettre: {kvp.Key}, Valeur: {kvp.Value}");
-            }
+            map.ToList().ForEach(kvp => Console.WriteLine($"Lettre: {kvp.Key}, Valeur: {kvp.Value}"));
             Console.ReadLine();
 
             /// Partie 3 ///
