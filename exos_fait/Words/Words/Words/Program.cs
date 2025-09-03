@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Words
@@ -28,12 +29,32 @@ namespace Words
             words.ToList().ForEach(message => writeToConsole(message));
             Console.ReadLine();
             */
+
             /// Exercice B ///
-            string[] words = { "whatThe!!!", "bonjour", "hello", "monde", "vert", "rouge", "bleu", "jaune", "My kingdom for a horse !", "Ooops I did it again" };
+            /*string[] words = { "whatThe!!!", "bonjour", "hello", "monde", "vert", "rouge", "bleu", "jaune", "My kingdom for a horse !", "Ooops I did it again" };
 
             words = words.Skip(1).Reverse().Skip(2).Reverse().ToArray();
             words.ToList().ForEach(message => writeToConsole(message));
             Console.ReadLine();
+            */
+
+            /// Exercice C ///
+            /*string[] words = { "+++++", "<<<<<", ">>>>>", "bonjour", "hello", "@@@@", "vert", "rouge", "bleu", "jaune", "#####", "%%%%%%%" };
+
+            words = words.SkipWhile(w => !Regex.IsMatch(w, "^[a-zA-Z]")).ToArray();
+            words.ToList().ForEach(message => writeToConsole(message));
+            Console.ReadLine();
+
+            // SkipWhile ne fonctionne pas
+            */
+
+            /// Exercice D ///
+            string[] words = { "i am the winner", "hello", "monde", "vert", "rouge", "bleu", "i am the looser" };
+
+            Console.WriteLine($"The winner is : {words.First()}");
+            Console.WriteLine($"The looser is : {words.Last()}");
+            Console.ReadLine();
+            
         }
     }
 }
