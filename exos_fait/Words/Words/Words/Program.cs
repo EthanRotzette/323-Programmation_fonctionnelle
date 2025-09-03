@@ -57,7 +57,32 @@ namespace Words
             */
 
             /// Partie 2 ///
-            //Func<string, double> Epsilon = word => Math.Sqrt(word.Length);
+            Func<string, double> Epsilon = word => Math.Sqrt(word.Length);
+            List<string> words = new List<string>() { "bonjour", "hello", "monde", "vert", "rouge", "bleu", "jaune" };
+            Dictionary<char, double> map = new Dictionary<char, double>();
+
+            for (int i = 0; i < words.Count; i++)
+            {
+                string word = words[i];
+                double epsilonValue = Epsilon(word);
+
+                foreach (char letter in word)
+                {
+                    if (!map.ContainsKey(letter))
+                        map[letter] = 0;
+
+                    map[letter] += epsilonValue;
+                }
+            }
+
+            foreach (var kvp in map)
+            {
+                Console.WriteLine($"Lettre: {kvp.Key}, Valeur: {kvp.Value}");
+            }
+            Console.ReadLine();
+
+            /// Partie 3 ///
+            /*
             List<string> frenchWords = new List<string>() {
                 "Merci",
                 "Hotdog",
@@ -151,6 +176,7 @@ namespace Words
             frenchWords = frenchWords.Where(w => englishWords.Contains(w)).ToList();
             frenchWords.ForEach(w => { Console.WriteLine(w); });
             Console.ReadLine();
+            */
         }
     }
 }
