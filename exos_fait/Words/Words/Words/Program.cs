@@ -49,12 +49,108 @@ namespace Words
             */
 
             /// Exercice D ///
-            string[] words = { "i am the winner", "hello", "monde", "vert", "rouge", "bleu", "i am the looser" };
+            /*string[] words = { "i am the winner", "hello", "monde", "vert", "rouge", "bleu", "i am the looser" };
 
             Console.WriteLine($"The winner is : {words.First()}");
             Console.WriteLine($"The looser is : {words.Last()}");
             Console.ReadLine();
-            
+            */
+
+            /// Partie 2 ///
+            //Func<string, double> Epsilon = word => Math.Sqrt(word.Length);
+            List<string> frenchWords = new List<string>() {
+                "Merci",
+                "Hotdog",
+                "Oui",
+                "Non",
+                "Désolé",
+                "Réunion",
+                "Manger",
+                "Boire",
+                "Téléphone",
+                "Ordinateur",
+                "Internet",
+                "Email",
+                "Sandwich",
+                "Hello",
+                "Taxi",
+                "Hotel",
+                "Gare",
+                "Train",
+                "Bus",
+                "Métro",
+                "Tramway",
+                "Vélo",
+                "Voiture",
+                "Piéton",
+                "Feu rouge",
+                "Cédez",
+                "Ralentir",
+                "gauche",
+                "droite",
+                "Continuer",
+                "Sandwich",
+                "Retourner",
+                "Arrêter",
+                "Stationnement",
+                "Parking",
+                "Interdit",
+                "Péage",
+                "Trafic",
+                "Route",
+                "Rond-point",
+                "Football",
+                "Carrefour",
+                "Feu",
+                "Panneau",
+                "Vitesse",
+                "Tramway",
+                "Aéroport",
+                "Héliport",
+                "Port",
+                "Ferry",
+                "Bateau",
+                "Canot",
+                "Kayak",
+                "Paddle",
+                "Surf",
+                "Plage",
+                "Mer",
+                "Océan",
+                "Rivière",
+                "Lac",
+                "Étang",
+                "Marais",
+                "Forêt",
+                "Hello",
+                "Montagne",
+                "Vallée",
+                "Plaine",
+                "Désert",
+                "Jungle",
+                "Savane",
+                "Volleyball",
+                "Tundra",
+                "Glacier",
+                "Neige",
+                "Pluie",
+                "Soleil",
+                "Nuage",
+                "Vent",
+                "Tempête",
+                "Ouragan",
+                "Tornade",
+                "Séisme",
+                "Tsunami",
+                "Volcan",
+                "Éruption",
+                "Ciel"
+            };
+
+            List<string> englishWords = new List<string>() { "Yes", "Thank", "Hotdog","Surf","Mountains" };
+            frenchWords = frenchWords.Where(w => englishWords.Contains(w)).ToList();
+            frenchWords.ForEach(w => { Console.WriteLine(w); });
+            Console.ReadLine();
         }
     }
 }
