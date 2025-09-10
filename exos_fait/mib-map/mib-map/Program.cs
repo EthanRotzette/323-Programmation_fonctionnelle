@@ -44,11 +44,11 @@ namespace mib_map
             // result.ToList().ForEach(p => Console.WriteLine(p));
             // Console.ReadLine();
 
-            //var resultCSV = products.Select(p => $"{p.Producer.Substring(0, 3)}...{p.Producer.Last()},{p.ProductName = i18n[p.ProductName]},{p.Quantity * p.PricePerUnit}");
-            //StreamWriter streamWriter = new StreamWriter("file.csv"); // créer dans \bin\Debug
-            //streamWriter.WriteLine("Seller,Product,CA");
-            //resultCSV.ToList().ForEach(r => streamWriter.WriteLine(r));
-            //streamWriter.Close();
+            // var resultCSV = products.Select(p => $"{p.Producer.Substring(0, 3)}...{p.Producer.Last()},{p.ProductName = i18n[p.ProductName]},{p.Quantity * p.PricePerUnit}");
+            // StreamWriter streamWriter = new StreamWriter("file.csv"); // créer dans \bin\Debug
+            // streamWriter.WriteLine("Seller,Product,CA");
+            // resultCSV.ToList().ForEach(r => streamWriter.WriteLine(r));
+            // streamWriter.Close();
 
             ///// Dashbord /////
             
@@ -57,16 +57,28 @@ namespace mib_map
             //Prix: p.Quantity < 10 ? (15 * p.PricePerUnit / 100) + p.PricePerUnit : p.Quantity >= 10 && p.Quantity <= 15 ? (5 * p.PricePerUnit / 100) + p.PricePerUnit : p.PricePerUnit, 
             //rentable : p.PricePerUnit * p.Quantity > 100 ? "Premium" : "Standard"));
 
+            /*
             var tuple = (
                 Nom: products.Select(p => p.Producer.Substring(0, 1) + (p.Producer.Length - 1) + p.Producer.Last()), 
                 Stock: products.Select(p => p.Quantity < 10 ? "Stock faible" : p.Quantity >= 10 && p.Quantity <= 15 ? "Stock normal" : "stock eleve"),
                 Prix: products.Select(p => p.Quantity < 10 ? Math.Round((15 * p.PricePerUnit / 100) + p.PricePerUnit) : p.Quantity >= 10 && p.Quantity <= 15 ? Math.Round((5 * p.PricePerUnit / 100) + p.PricePerUnit) : p.PricePerUnit),
                 rentable: products.Select(p => p.PricePerUnit * p.Quantity > 100 ? "Premium" : "Standard")
                 );
+            */
+
+            var tuple = products.Select(p => (
+                anon: p.Producer.Substring(0, 1) + (p.Producer.Length - 1) + p.Producer.Last(),
+                stock: p.Quantity < 10 ? "Stock faible" : p.Quantity >= 10 && p.Quantity <= 15 ? "Stock normal" : "stock eleve",
+                prix: p.Quantity < 10 ? Math.Round((15 * p.PricePerUnit / 100) + p.PricePerUnit) : p.Quantity >= 10 && p.Quantity <= 15 ? Math.Round((5 * p.PricePerUnit / 100) + p.PricePerUnit) : p.PricePerUnit,
+                rentable: p.PricePerUnit * p.Quantity > 100 ? "Premium" : "Standard"));
 
             var options = new JsonSerializerOptions { IncludeFields = true };
             string json = JsonSerializer.Serialize(tuple, options);
             File.WriteAllText("file.json",json);
+
+            ///// Mesure de performances /////
+            
+
         }
 
         class Product
