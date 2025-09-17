@@ -13,15 +13,37 @@ namespace Rando
 
         private void Rando_Form_Paint(object sender, PaintEventArgs e)
         {
-            Pen myPen = new Pen(Color.Red);
-            myPen.Width = 2;
+            Pen myPen = new Pen(Color.Red) { Width = 2 };
 
             string filepath = "C:\\Users\\pk50gbi\\Documents\\GitHub\\323-Programmation_fonctionnelle\\exos_fait\\Rando\\gpx\\gemmikandersteg.gpx";
             var trackpoints = ReadFile(filepath);
 
-            Point[] points = new Point[4] { new Point(30,50), new Point(50,10), new Point(80,50), new Point(111,400) };
-            this.CreateGraphics().DrawLines(myPen, points);
+            if (trackpoints.Count == 0) return;
+
+            // Récupérer les bornes GPS
+            double minLat = trackpoints.Min(p => p.Latitude);
+            double maxLat = trackpoints.Max(p => p.Latitude);
+            double minLon = trackpoints.Min(p => p.Longitude);
+            double maxLon = trackpoints.Max(p => p.Longitude);
+
+            // Marge pour éviter que ça touche les bords
+            int margin = 20;
+            int width = this.ClientSize.Width - 2 * margin;
+            int height = this.ClientSize.Height - 2 * margin;
+
+            // Conversion GPS -> pixels
+            Point[] points = trackpoints.Select(p =>
+            {
+                int x = margin + (int)((p.Longitude - minLon) / (maxLon - minLon) * width);
+
+                int y = margin + (int)((maxLat - p.Latitude) / (maxLat - minLat) * height); // inversion Y
+
+                return new Point(x, y);
+            }).ToArray();
+
+            e.Graphics.DrawLines(myPen, points);
         }
+
         private List<Trackpoint> ReadFile(string filePath)
         {
             List<Trackpoint> trackpoints = new List<Trackpoint>();
@@ -46,7 +68,7 @@ namespace Rando
                             var data = reader.Track;
                             
                             var mappedData = data.ToGpxPoints().
-                                Select(point => new Trackpoint() { Latitude = point.Latitude, Longitude = point.Longitude, Elevation = point.Elevation });
+                                Select(point => new Trackpoint(point.Latitude,point.Longitude,point.Elevation));
 
                             trackpoints.AddRange(mappedData);
                             break;
@@ -59,6 +81,13 @@ namespace Rando
     }
     class Trackpoint
     {
+        public Trackpoint(double latitude, double longitude, double? elevation)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+            Elevation = elevation;
+        }
+
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
