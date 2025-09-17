@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -51,21 +52,7 @@ namespace mib_map
             // streamWriter.Close();
 
             ///// Dashbord /////
-            
-            //var result = products.Select(p => (Nom: p.Producer.Substring(0, 1) + (p.Producer.Length - 1) + p.Producer.Last(), NomProduit: p.ProductName, 
-            //Stock: p.Quantity < 10 ? "Stock faible" : p.Quantity >= 10 && p.Quantity <= 15 ? "Stock normal" : "stock élevé", 
-            //Prix: p.Quantity < 10 ? (15 * p.PricePerUnit / 100) + p.PricePerUnit : p.Quantity >= 10 && p.Quantity <= 15 ? (5 * p.PricePerUnit / 100) + p.PricePerUnit : p.PricePerUnit, 
-            //rentable : p.PricePerUnit * p.Quantity > 100 ? "Premium" : "Standard"));
-
             /*
-            var tuple = (
-                Nom: products.Select(p => p.Producer.Substring(0, 1) + (p.Producer.Length - 1) + p.Producer.Last()), 
-                Stock: products.Select(p => p.Quantity < 10 ? "Stock faible" : p.Quantity >= 10 && p.Quantity <= 15 ? "Stock normal" : "stock eleve"),
-                Prix: products.Select(p => p.Quantity < 10 ? Math.Round((15 * p.PricePerUnit / 100) + p.PricePerUnit) : p.Quantity >= 10 && p.Quantity <= 15 ? Math.Round((5 * p.PricePerUnit / 100) + p.PricePerUnit) : p.PricePerUnit),
-                rentable: products.Select(p => p.PricePerUnit * p.Quantity > 100 ? "Premium" : "Standard")
-                );
-            */
-
             var tuple = products.Select(p => (
                 anon: p.Producer.Substring(0, 1) + (p.Producer.Length - 1) + p.Producer.Last(),
                 stock: p.Quantity < 10 ? "Stock faible" : p.Quantity >= 10 && p.Quantity <= 15 ? "Stock normal" : "stock eleve",
@@ -75,12 +62,34 @@ namespace mib_map
             var options = new JsonSerializerOptions { IncludeFields = true };
             string json = JsonSerializer.Serialize(tuple, options);
             File.WriteAllText("file.json",json);
-
+            */
             ///// Mesure de performances /////
-            
+            Action action = () => { };
+            var mesure = MesurePerf(action);
 
+            Console.WriteLine(mesure);
+            Console.ReadLine();
         }
+        static (long time, long memory) MesurePerf(Action action, int iterations = 1000)
+        {
+            // Forcer le garbage collection avant mesure
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
 
+            var memoryBefore = GC.GetTotalMemory(false);
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int i = 0; i < iterations; i++)
+            {
+                action();
+            }
+
+            stopwatch.Stop();
+            var memoryAfter = GC.GetTotalMemory(false);
+
+            return (stopwatch.ElapsedMilliseconds, memoryAfter - memoryBefore);
+        }
         class Product
         {
             public int Location { get; set; }
