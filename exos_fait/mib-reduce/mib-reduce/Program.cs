@@ -25,8 +25,8 @@ namespace mib_reduce
             var NumberGroseilles = products.Where(p => p.ProductName == "Groseilles").Select(p => p.Quantity).Sum();
             Console.WriteLine("Nombre de groseilles : " + NumberGroseilles);
 
-//            var ChiffreAffaire = products.GroupBy(p => p.Producer).ToList().ForEach(group=>group.Aggregate(p=>p.Quantity*p.PricePerUnit));
-  //          ChiffreAffaire.ForEach(c => Console.WriteLine("Chiffre d'affaire : " + c));
+            //var ChiffreAffaire = products.GroupBy(p => p.Producer).ToList().ForEach(group=>group.Aggregate(p=>p.Quantity*p.PricePerUnit));
+            //ChiffreAffaire.ForEach(c => Console.WriteLine("Chiffre d'affaire : " + c));
             Console.ReadLine();
 
         }
